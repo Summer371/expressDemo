@@ -16,7 +16,7 @@ app.all("*",function (req,res,next) {
         next();
     }
 });
-
+//
 app.listen(3000,()=>{
     console.log("server is start success")
 })
